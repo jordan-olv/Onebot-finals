@@ -9,24 +9,30 @@ const fs = require("fs");
 
 module.exports = (client: Client, module: string) => {
 
-  fs.readdirSync(`../modules/${module}`).forEach((dir: any) => {
-    const eventFiles = fs
-      .readdirSync(`../discord/events/${dir}`)
-      .filter((file: string) => file.endsWith(".ts"));
+  //console.log(fs.readdirSync(`../modules/${module}/events`));
+  const eventsPath = `./src/modules/${module}/events`;
 
-    console.log(eventFiles)
-    // Loop through all files and execute the event when it is actually emmited.
-    // for (const file of eventFiles) {
-    //   const event = require(`../events/${dir}/${file}`);
-    //   if (event.once) {
-    //     client.once(event.name, (...args) => event.execute(...args, client));
-    //   } else {
-    //     client.on(
-    //       event.name,
-    //       async (...args) => await event.execute(...args, client)
-    //     );
-    //   }
-    // }
-  });
+  if (fs.existsSync(eventsPath)) {
+    fs.readdirSync(`./src/modules/${module}/events`).forEach((dir: any) => {
+      console.log(dir);
+      const eventFiles = fs
+        .readdirSync(`./src/modules/${module}/events/${dir}`)
+        .filter((file: string) => file.endsWith(".ts"));
+
+      console.log(eventFiles)
+      // Loop through all files and execute the event when it is actually emmited.
+      for (const file of eventFiles) {
+        const event = require(`../modules/${module}/events/${dir}/${file}`);
+        if (event.once) {
+          client.once(event.name, (...args) => event.execute(...args, client));
+        } else {
+          client.on(
+            event.name,
+            async (...args) => await event.execute(...args, client)
+          );
+        }
+      }
+    })
+  }
 
 };

@@ -8,6 +8,9 @@ module.exports = {
   async execute(message: any) {
 
     const command = client.commands.get("test");
-    console.log(message);
+    if (!command) return;
+
+    command.execute(client, message);
+    console.log(message.content);
   }
 };
