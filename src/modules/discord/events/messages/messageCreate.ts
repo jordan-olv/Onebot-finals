@@ -7,10 +7,10 @@ module.exports = {
 
   async execute(message: any) {
 
-    const command = client.commands.get("test");
-    if (!command) return;
+    const PREFIX = "!";
+    const args = message.content.slice(PREFIX.length).trim().split(/ +/);
+    const command = args.shift()?.toLowerCase();
 
     command.execute(client, message);
-    console.log(message.content);
   }
 };
