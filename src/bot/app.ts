@@ -1,5 +1,6 @@
 import { Client, Collection, GatewayIntentBits, Partials, REST, Routes } from "discord.js";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 
@@ -17,8 +18,7 @@ export const client = new Client({
   partials: [Partials.Channel, Partials.Reaction, Partials.Message],
 });
 
-client.commands = new Collection();
-// client.slashCommands = new Collection();
+
 // client.buttonCommands = new Collection();
 // client.selectCommands = new Collection();
 // client.contextCommands = new Collection();
@@ -33,9 +33,21 @@ client.commands = new Collection();
 //   require(`./handlers/${file}`)(client);
 // });
 
-["modules"].forEach((file) => {
-  require(`./handlers/${file}`)(client);
-});
 
-client.login(process.env.DISCORD_TOKEN);
+
+export function startBot() {
+
+  client.application?.commands.set([])
+  client.commands = new Collection();
+  client.slashCommands = new Collection();
+  client.database = require('../database/Mongoose');
+
+  ["modules", "mongoose"].forEach((file) => {
+    require(`./handlers/${file}`)(client);
+  });
+
+  client.login(process.env.DISCORD_TOKEN).then(() => {
+    console.log("Bot connecté!");
+  });
+}
 

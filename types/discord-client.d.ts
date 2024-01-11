@@ -7,6 +7,7 @@ declare module "discord.js" {
   interface Client {
     commands: Collection<string, Command>;
     slashCommands: Collection<string, SlashCommand>;
+    database: any;
     // ... autres propriétés personnalisées ...
   }
 

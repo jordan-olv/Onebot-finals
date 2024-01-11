@@ -1,15 +1,15 @@
 import { Client } from "discord.js";
-
 const fs = require("fs");
 module.exports = (client: Client) => {
 
   //LOAD MODULES
-  const modules: string[] = fs.readdirSync("./src/modules");
+  const modules: string[] = fs.readdirSync("./src/bot/modules");
 
 
   for (const module of modules) {
-    const commandsPath = './src/modules/' + module + '/commands';
-    const eventsPath = './src/modules/' + module + '/events';
+    const commandsPath = './src/bot/modules/' + module + '/commands';
+    const eventsPath = './src/bot/modules/' + module + '/events';
+    const slashPath = './src/bot/modules/' + module + '/slash';
 
     //LOAD COMMANDS
     if (fs.existsSync(commandsPath)) {
@@ -19,6 +19,11 @@ module.exports = (client: Client) => {
     //LOAD EVENTS
     if (fs.existsSync(eventsPath)) {
       require(`./events`)(client, module);
+    }
+
+    //LOAD SLASH
+    if (fs.existsSync(slashPath)) {
+      require(`./slash`)(client, module);
     }
   }
 }

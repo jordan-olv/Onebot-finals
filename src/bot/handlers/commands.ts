@@ -9,21 +9,20 @@ const fs = require("fs");
 
 module.exports = (client: Client, module: string) => {
 
-  const commandsPath = `./src/modules/${module}/commands`;
-
+  const commandsPath = `./src/bot/modules/${module}/commands`;
+  console.log(commandsPath);
   if (fs.existsSync(commandsPath)) {
     const commandFolders: string[] = fs.readdirSync(commandsPath);
     for (const folder of commandFolders) {
       const folderPath = `${commandsPath}/${folder}`;
+      console.log(folderPath);
       if (fs.existsSync(folderPath)) {
         const commandFiles: string[] = fs
           .readdirSync(folderPath)
           .filter((file: string) => file.endsWith(".ts"));
         for (const file of commandFiles) {
-          console.log(`${folderPath}/${file}`)
           const command = require(`../modules/${module}/commands/${folder}/${file}`);
           client.commands.set(command.name, command);
-          console.log(client);
         }
       }
     }

@@ -10,13 +10,13 @@ const fs = require("fs");
 module.exports = (client: Client, module: string) => {
 
   //console.log(fs.readdirSync(`../modules/${module}/events`));
-  const eventsPath = `./src/modules/${module}/events`;
+  const eventsPath = `./src/bot/modules/${module}/events`;
 
   if (fs.existsSync(eventsPath)) {
-    fs.readdirSync(`./src/modules/${module}/events`).forEach((dir: any) => {
+    fs.readdirSync(`./src/bot/modules/${module}/events`).forEach((dir: any) => {
       console.log(dir);
       const eventFiles = fs
-        .readdirSync(`./src/modules/${module}/events/${dir}`)
+        .readdirSync(`./src/bot/modules/${module}/events/${dir}`)
         .filter((file: string) => file.endsWith(".ts"));
 
       console.log(eventFiles)
