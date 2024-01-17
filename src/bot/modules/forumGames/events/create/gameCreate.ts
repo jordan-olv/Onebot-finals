@@ -1,20 +1,20 @@
 const { Collection, ChannelType, Events, EmbedBuilder, PermissionsBitField } = require("discord.js");
 import { ForumChannel, Guild } from "discord.js";
 import { client } from "../../../../BotClient";
-const gameSchema = require('../database/schema/game.js');
+const gameSchema = require('../../../../../database/schema/game.js');
 
 module.exports = {
   name: 'gameCreate',
 
-  async execute(game: Game, guild: Guild, client: client) {
+  async execute(game: any, guild: Guild, client: client) {
 
     if (!guild) return;
 
-    const role = await guild?.roles.create({
-      name: game.name,
-      color: game.color,
-      mentionable: true
-    });
+    // const role = await guild?.roles.create({
+    //   name: game.name,
+    //   color: game.color,
+    //   mentionable: true
+    // });
 
     const embed = new EmbedBuilder()
       .setTitle(game.name)
@@ -34,16 +34,16 @@ module.exports = {
     const msg = await thread.fetchStarterMessage();
     const reactAdd = await msg?.react('🔔');
 
-    const game = new gameSchema({
-      name: gameName,
-      description: gameDescription,
-      image: gameImage,
-      color: gameColor,
+    const gameAdd = new gameSchema({
+      name: game.name,
+      description: game.description,
+      image: game.image,
+      color: game.color,
       messageId: '',
       roleId: '',
     });
   
-    //await game.save().catch((err: any) => console.log(err));
+    await gameAdd.save().catch((err: any) => console.log(err));
 
     console.log(channel);
     /*     const newThread = await channel?.threads.create({
