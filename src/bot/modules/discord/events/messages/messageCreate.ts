@@ -1,11 +1,11 @@
 const { Collection, ChannelType, Events, EmbedBuilder, PermissionsBitField } = require("discord.js");
-
-import { client } from '../../../../app';
+import { client } from "../../../../BotClient";
 
 module.exports = {
   name: Events.MessageCreate,
 
-  async execute(message: any) {
+  async execute(message: any, client: client) {
+    
     if (message.channel.type !== 0) return;
     if (message.author.bot) return;
     if (!message.guild) return;

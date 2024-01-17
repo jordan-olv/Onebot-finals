@@ -8,6 +8,7 @@ declare module "discord.js" {
     commands: Collection<string, Command>;
     slashCommands: Collection<string, SlashCommand>;
     database: any;
+    instance: boolean;
     // ... autres propriétés personnalisées ...
   }
 

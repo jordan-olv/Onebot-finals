@@ -10,12 +10,10 @@ const fs = require("fs");
 module.exports = (client: Client, module: string) => {
 
   const commandsPath = `./src/bot/modules/${module}/commands`;
-  console.log(commandsPath);
   if (fs.existsSync(commandsPath)) {
     const commandFolders: string[] = fs.readdirSync(commandsPath);
     for (const folder of commandFolders) {
       const folderPath = `${commandsPath}/${folder}`;
-      console.log(folderPath);
       if (fs.existsSync(folderPath)) {
         const commandFiles: string[] = fs
           .readdirSync(folderPath)

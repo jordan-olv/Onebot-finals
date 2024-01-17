@@ -3,12 +3,14 @@ import session from 'express-session';
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Request, Response } from 'express';
-import { client } from '../bot/app';
-const gameSchema = require("../database/schema/game.js");
-import mongo from 'mongoose';
-
+//import { client } from '../bot/app';
+import { client } from '../bot/BotClient';
+const gameSchema = require('../database/schema/game.js');
+import mongo, { get } from 'mongoose';
 
 const app = express();
+
+export default async (client: client) => {
 
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
@@ -55,42 +57,40 @@ app.post('/login', passport.authenticate('local', {
   failureRedirect: '/login'
 }));
 
-app.get('/test', (req: Request, res: Response) => {
-  const guilds = client.guilds.cache.get('1148634282093445150');
-  console.log(guilds?.name);
+app.get('/test', async (req: Request, res: Response) => {
+  const guild = await getGuild('1148634282093445150');
+  
+  res.send(guild?.name);
 });
 
 app.post('/game/create', async (req: Request, res: Response) => {
-  const guild = getGuild('1148634282093445150');
+  
+  const guild = await getGuild('1148634282093445150');
 
   const gameName = req.body.gamename;
   const gameDescription = req.body.gamedescription;
   const gameImage = req.body.gameimage;
   const gameColor = req.body.gamecolor;
 
-  const game = new gameSchema({
+  const game = {
     name: gameName,
     description: gameDescription,
     image: gameImage,
-    color: gameColor,
-    messageId: '',
-    roleId: '',
-  });
+    color: gameColor
+  };
+  
+  client.emit('gameCreate', game, guild, client);
 
-
-
-
-  await game.save().catch((err: any) => console.log(err));
-  client.emit('gameCreate', game, guild);
-
-  res.send(game);
-  res.status(200);
+  res.send('ok');
 });
 
-const getGuild = (id: string) => {
-  return client.guilds.cache.get(id);
+const getGuild = async(id:string) => {
+  const guild = client.guilds.cache.get(id);
+  return guild;
 }
 
 app.listen(3002, () => {
   console.log('Serveur démarré sur http://localhost:3002');
 });
+
+}

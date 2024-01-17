@@ -4,8 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently \"tsx watch src/bot/start.ts\" \"tsx watch src/webapp/api.ts\"",
-    "devv": "tsx watch src/bot/app.ts",
+    "dev": "concurrently \"tsx watch src/bot/app.ts\" \"tsx watch src/webapp/api.ts\"",
     "start": "tsx watch src/bot/app.ts",
     "build": "tsup src/app.ts --minify"
   },

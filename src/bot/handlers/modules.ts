@@ -1,6 +1,6 @@
-import { Client } from "discord.js";
+import { client } from "../BotClient";
 const fs = require("fs");
-module.exports = (client: Client) => {
+module.exports = (client: client) => {
 
   //LOAD MODULES
   const modules: string[] = fs.readdirSync("./src/bot/modules");
