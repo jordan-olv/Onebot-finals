@@ -4,6 +4,7 @@ import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Request, Response } from 'express';
 //import { client } from '../bot/app';
+import multer, { DiskStorageOptions } from 'multer';
 import { client } from '../bot/BotClient';
 const gameSchema = require('../database/schema/game.js');
 import mongo, { get } from 'mongoose';
@@ -18,6 +19,7 @@ app.use(passport.session());
 
 app.set('view engine', 'ejs');
 app.set('views', 'src/webapp/views');
+  app.use('/uploads', express.static('uploads'));
 app.use(express.urlencoded({ extended: false }));
 
 passport.use(new LocalStrategy(
@@ -36,6 +38,20 @@ passport.serializeUser(function (user: any, done) {
 passport.deserializeUser(function (id: any, done) {
   done(null, { id: 1, name: "User" });
 });
+
+  // Définir le dossier de destination des fichiers téléchargés
+  const storage: multer.StorageEngine = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+      const extension = file.originalname.split('.').pop();
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      cb(null, file.fieldname + '-' + uniqueSuffix + '.' + extension);
+    }
+  });
+
+  const upload = multer({ storage });
 
 app.get('/', (req: Request, res: Response) => {
   if (req.isAuthenticated()) {
@@ -63,14 +79,14 @@ app.get('/test', async (req: Request, res: Response) => {
   res.send(guild?.name);
 });
 
-app.post('/game/create', async (req: Request, res: Response) => {
+  app.post('/game/create', upload.single('gameimage'), async (req: Request, res: Response) => {
   
   const guild = await getGuild('1148634282093445150');
 
   const gameName = req.body.gamename;
   const gameDescription = req.body.gamedescription;
-  const gameImage = req.body.gameimage;
-  const gameColor = req.body.gamecolor;
+    const gameImage = req.file ? req.file.filename : '';
+    const gameColor = req.body.gamecolor || '#55CCFC';
 
   const game = {
     name: gameName,
@@ -88,6 +104,8 @@ const getGuild = async(id:string) => {
   const guild = client.guilds.cache.get(id);
   return guild;
 }
+
+
 
 app.listen(3002, () => {
   console.log('Serveur démarré sur http://localhost:3002');

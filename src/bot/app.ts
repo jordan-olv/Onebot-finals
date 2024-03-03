@@ -1,10 +1,13 @@
 import { Client, Collection, GatewayIntentBits, Partials, REST, Routes } from "discord.js";
 import dotenv from "dotenv";
 import { client } from "./BotClient";
-
 dotenv.config();
 
 client.init();
+
+
+
+//client.init();
 
 // client.buttonCommands = new Collection();
 // client.selectCommands = new Collection();

@@ -15,7 +15,7 @@ module.exports = {
 
     // If the interaction is not a command in cache.
 
-    if (!command) return;
+    if (!command) return; 
 
     // A try to executes the interaction.
 

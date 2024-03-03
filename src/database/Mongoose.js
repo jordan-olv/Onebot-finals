@@ -1,6 +1,7 @@
 const guildSchema = require("./schema/guild.js");
 const memberSchema = require("./schema/member.js");
 const userSchema = require("./schema/user.js");
+const gameSchema = require("./schema/game.js");
 
 //Create/find Guilds Database
 module.exports.fetchGuild = async function (key) {
@@ -18,6 +19,15 @@ module.exports.fetchGuild = async function (key) {
     return guildDB;
   }
 };
+
+module.exports.fetchGuildById = async function (id) {
+  let guildDB = await guildSchema.findOne({ id: id });
+  if (guildDB) {
+    return guildDB;
+  } else {
+    return null;
+  }
+}
 
 //Create/find Members Database
 module.exports.fetchMember = async function (user) {
@@ -94,10 +104,20 @@ module.exports.createGame = async function (key) {
       name: key.name,
       description: key.description,
       color: key.color,
+      guildId: key.guildId,
       messageId: key.messageId,
       roleId: key.roleId,
     });
     await gameDB.save().catch((err) => console.log(err));
     return gameDB;
+  }
+}
+
+module.exports.fetchAllGames = async function (id) {
+  let gameDB = await gameSchema.find({ guildId: id });
+  if (gameDB) {
+    return gameDB;
+  } else {
+    return null;
   }
 }

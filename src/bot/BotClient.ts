@@ -2,13 +2,12 @@ import { Client, Collection, GatewayIntentBits, Partials, REST, Routes } from "d
 import dotenv from "dotenv";
 import api from '../webapp/api'
 
-dotenv.config();
-
 export class client extends Client {
   private static instance: client;
 
   public static async init() {
     if (!client.instance) {
+      const test = dotenv.config();
       client.instance = new Client({
           // https://ziad87.net/intents/
           intents: [
@@ -17,7 +16,8 @@ export class client extends Client {
             GatewayIntentBits.GuildMessages,
             GatewayIntentBits.MessageContent,
             GatewayIntentBits.GuildScheduledEvents,
-            GatewayIntentBits.GuildMessageReactions
+          GatewayIntentBits.GuildMessageReactions,
+          GatewayIntentBits.GuildVoiceStates
           ],
           partials: [Partials.Channel, Partials.Reaction, Partials.Message],
         });
@@ -32,6 +32,7 @@ export class client extends Client {
         });
 
         client.instance.login(process.env.TOKEN).then(() => {
+          console.log(process.env.TOKEN);
           console.log(`[BOT] Logged in as ${client.instance.user?.tag}!`);
         });
 

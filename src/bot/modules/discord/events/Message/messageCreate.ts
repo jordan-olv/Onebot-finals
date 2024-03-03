@@ -10,6 +10,12 @@ module.exports = {
     if (message.author.bot) return;
     if (!message.guild) return;
 
+    let data = {
+      guild: null,
+    };
+
+    data.guild = await client.database.fetchGuild(message);
+
     const prefix = "!";
 
     if (!message.content.startsWith(prefix)) return;

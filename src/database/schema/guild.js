@@ -27,6 +27,14 @@ module.exports = mongoose.model("Guild", new mongoose.Schema({
         channelsList: [],
       },
     },
+    forumGame: {
+      type: Object,
+      default: {
+        channelsList: [],
+        reactionList: [],
+        nbForum: 0,
+      }
+    },
     party: {
       type: Object,
       default: {

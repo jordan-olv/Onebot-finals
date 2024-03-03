@@ -7,6 +7,7 @@ module.exports = mongoose.model("Game", new mongoose.Schema({
   description: { type: String },
   image: { type: String },
   color: { type: String },
+  guildId: { type: String },
   messageId: { type: String },
   roleId: { type: String }
 }));
